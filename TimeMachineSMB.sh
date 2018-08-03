@@ -1,10 +1,11 @@
 #!/bin/bash
 ## Install Samba 4.8.0 for Time Machine
 ## Author: Lionel Frey
-## Version: 1.0
+## Version: 1.1
 
 ## History
 ## 1.0 - Ok 16/04/18
+## 1.1 - custom dir added @alEXXOiD 03/08/18
 
 ### Tested on Ubuntu Server LTS 16.04.04 64Bits
 
@@ -65,9 +66,9 @@ EOF
 #read -s -n1 -p "Press Any Key to Continue..."; echo
 
 cd /usr/src
-wget https://download.samba.org/pub/samba/stable/samba-4.8.0.tar.gz
-tar -xzvf samba-4.8.0.tar.gz
-cd samba-4.8.0
+wget https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.gz
+tar -xzvf samba-4.8.3.tar.gz
+cd samba-4.8.3
 
 #read -s -n1 -p "Press Any Key to Continue..."; echo
 
@@ -98,13 +99,13 @@ log file = /var/log/samba/%m.log
 max log size = 1000
 
 # Special configuration for Apple's Time Machine
-fruit:model = MacPro
+fruit:model = Macmini
 fruit:advertise_fullsync = true
 fruit:aapl = yes
 
 ## Definde your shares here
 [TimeMachine Home]
-path = /srv/backup/timemachine/%U
+path = /home/backups/timemachine/%U
 valid users = %U
 writable = yes
 durable handles = yes
@@ -124,9 +125,9 @@ directory mask = 0700
 comment = Time Machine" > /etc/samba/smb.conf
 
 mkdir -p /var/log/samba
-mkdir -p /srv/backup/timemachine/
-mkdir -m 700 /srv/backup/timemachine/$USERNAME
-chown $USERNAME /srv/backup/timemachine/$USERNAME
+mkdir -p /home/backups/timemachine/
+mkdir -m 700 /home/backups/timemachine/$USERNAME
+chown $USERNAME /home/backups/timemachine/$USERNAME
 
 sed -i 's/Type=notify/Type=simple/g' /lib/systemd/system/smb.service
 
